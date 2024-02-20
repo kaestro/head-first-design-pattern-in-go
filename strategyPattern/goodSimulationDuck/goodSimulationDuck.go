@@ -1,4 +1,4 @@
-package main
+package goodSimulationDuck
 
 import "fmt"
 
@@ -30,6 +30,11 @@ func (q Quack) quack() {
 
 type Squeak struct{}
 
+type Duck struct {
+	flyBehavior   FlyBehavior
+	quackBehavior QuackBehavior
+}
+
 func (s Squeak) quack() {
 	fmt.Println("squeak")
 }
@@ -38,4 +43,14 @@ type MuteQuack struct{}
 
 func (mq MuteQuack) quack() {
 	fmt.Println("<< Silence >>")
+}
+
+func Simulate() {
+	mallardDuck := Duck{FlyWithWings{}, Quack{}}
+	mallardDuck.flyBehavior.fly()
+	mallardDuck.quackBehavior.quack()
+
+	modelDuck := Duck{FlyNoWay{}, Quack{}}
+	modelDuck.flyBehavior.fly()
+	modelDuck.quackBehavior.quack()
 }
