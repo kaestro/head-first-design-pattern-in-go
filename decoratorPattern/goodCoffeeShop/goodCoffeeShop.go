@@ -2,84 +2,94 @@ package goodCoffeeShop
 
 import "fmt"
 
+const (
+	EspressoDescription = "에스프레소"
+	EspressoPrice       = 1.99
+
+	HouseBlendDescription = "하우스 블렌드 커피"
+	HouseBlendPrice       = 0.89
+
+	MochaDescription = ", 모카"
+	MochaPrice       = 0.5
+
+	MilkDescription = ", 우유"
+	MilkPrice       = 0.3
+
+	SoyDescription = ", 두유"
+	SoyPrice       = 0.2
+)
+
 type Beverage interface {
-	GetDescription() string
-	Cost() float64
+	Description() string
+	Price() float64
 }
 
-type Espresso struct {
-	Description string
+type Espresso struct{}
+
+func (e Espresso) Description() string {
+	return EspressoDescription
 }
 
-func (e Espresso) GetDescription() string {
-	return e.Description
+func (e Espresso) Price() float64 {
+	return EspressoPrice
 }
 
-func (e Espresso) Cost() float64 {
-	return 1.99
+type HouseBlend struct{}
+
+func (hb HouseBlend) Description() string {
+	return HouseBlendDescription
 }
 
-type HouseBlend struct {
-	Description string
-}
-
-func (hb HouseBlend) GetDescription() string {
-	return hb.Description
-}
-
-func (hb HouseBlend) Cost() float64 {
-	return 0.89
+func (hb HouseBlend) Price() float64 {
+	return HouseBlendPrice
 }
 
 type Mocha struct {
 	Beverage
 }
 
-func (m Mocha) GetDescription() string {
-	return m.Beverage.GetDescription() + ", 모카"
+func (m Mocha) Description() string {
+	return m.Beverage.Description() + MochaDescription
 }
 
-func (m Mocha) Cost() float64 {
-	return m.Beverage.Cost() + 0.5
+func (m Mocha) Price() float64 {
+	return m.Beverage.Price() + MochaPrice
 }
 
 type Milk struct {
 	Beverage
 }
 
-func (m Milk) GetDescription() string {
-	return m.Beverage.GetDescription() + ", 우유"
+func (m Milk) Description() string {
+	return m.Beverage.Description() + MilkDescription
 }
 
-func (m Milk) Cost() float64 {
-	return m.Beverage.Cost() + 0.3
+func (m Milk) Price() float64 {
+	return m.Beverage.Price() + MilkPrice
 }
 
 type Soy struct {
 	Beverage
 }
 
-func (s Soy) GetDescription() string {
-	return s.Beverage.GetDescription() + ", 두유"
+func (s Soy) Description() string {
+	return s.Beverage.Description() + SoyDescription
 }
 
-func (s Soy) Cost() float64 {
-	return s.Beverage.Cost() + 0.2
+func (s Soy) Price() float64 {
+	return s.Beverage.Price() + SoyPrice
 }
 
 func SimulateGoodCoffeeShop() {
-	e := Espresso{"에스프레소"}
-	fmt.Println(e.GetDescription(), e.Cost())
+	beverages := make([]Beverage, 0, 5)
 
-	hb := HouseBlend{"하우스 블렌드 커피"}
-	fmt.Println(hb.GetDescription(), hb.Cost())
+	beverages = append(beverages, Espresso{})
+	beverages = append(beverages, HouseBlend{})
+	beverages = append(beverages, Mocha{Espresso{}})
+	beverages = append(beverages, Milk{HouseBlend{}})
+	beverages = append(beverages, Soy{Milk{HouseBlend{}}})
 
-	em := Mocha{e}
-	fmt.Println(em.GetDescription(), em.Cost())
-
-	hbm := Milk{hb}
-	fmt.Println(hbm.GetDescription(), hbm.Cost())
-
-	hbms := Soy{hbm}
-	fmt.Println(hbms.GetDescription(), hbms.Cost())
+	for _, beverage := range beverages {
+		fmt.Println(beverage.Description(), beverage.Price())
+	}
 }
